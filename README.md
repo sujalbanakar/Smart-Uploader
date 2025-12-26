@@ -2,8 +2,12 @@
 
 A robust, fault-tolerant file upload system engineered to handle large datasets (GBs) over unstable networks. Features **chunk-based streaming**, **concurrency control**, and **automatic resumability**.
 
-![Project Screenshot](https://via.placeholder.com/800x400?text=Upload+Screenshot+Placeholder)
-*(Add a screenshot of your beautiful UI here later!)*
+## 📸 Project Screenshots
+
+<p align="center">
+  <img src="./assets/Screenshot2.png" width="45%" />
+  <img src="./assets/Screenshot1.png" width="45%" />
+</p>
 
 ## 🌟 Key Features
 
@@ -37,5 +41,5 @@ Follow these steps to run the project locally.
 
 ### 1. Clone the Repository
 ```bash
-git clone [https://github.com/YOUR_USERNAME/resilient-file-uploader.git](https://github.com/YOUR_USERNAME/resilient-file-uploader.git)
+git clone [https://github.com/sujalbanakar/resilient-file-uploader.git](https://github.com/sujalbanakar/resilient-file-uploader.git)
 cd resilient-file-uploader
