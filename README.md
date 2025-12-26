@@ -31,6 +31,30 @@ A robust, fault-tolerant file upload system engineered to handle large datasets 
 * FS (File System) - Uses `fs.write` with offsets for random access writing
 * Yauzl - Stream-based ZIP inspection
 
+## 🧠 Technical Architecture & Design Decisions
+
+### 1. Data Integrity & Hashing
+To guarantee zero corruption during transmission, the system implements **End-to-End Integrity Verification**:
+* **Client-Side:** Each file is hashed using `spark-md5` before upload.
+* **Server-Side:** Upon assembly, the server re-calculates the hash. The upload is only marked "Success" if the server hash matches the client hash.
+
+### 2. Deep Dive: Pause/Resume Logic
+The resumability is not just a UI toggle; it relies on a **State-Aware Handshake Protocol**:
+* **Pre-Flight Check:** Before uploading, the client sends a `GET /status` request.
+* **Offset Recovery:** The server returns the number of bytes already stored on disk.
+* **Slicing:** The client uses `Blob.slice(server_offset)` to skip already uploaded bytes and resumes the stream immediately from the missing chunk.
+
+### 3. Key Trade-offs
+* **Consistency vs. Speed:** I chose to store temporary chunks on the **disk** (using `fs`) rather than in **RAM**.
+    * *Pro:* Prevents server memory leaks when hundreds of users upload simultaneously.
+    * *Con:* Slightly slower due to Disk I/O latency compared to in-memory streams.
+* **MD5 vs. SHA-256:** MD5 was selected for hashing because it is significantly faster to compute in the browser for multi-GB files, which is an acceptable trade-off for non-cryptographic file integrity checks.
+
+### 4. Future Roadmap
+* [ ] **S3 Integration:** Move from local filesystem storage to AWS S3 Multipart Uploads for infinite scalability.
+* [ ] **WebSockets:** Replace HTTP polling for progress updates with real-time WebSocket events.
+* [ ] **Drag & Drop:** Enhance UI to support dropping folders.
+
 ## 🚀 Getting Started
 
 Follow these steps to run the project locally.
